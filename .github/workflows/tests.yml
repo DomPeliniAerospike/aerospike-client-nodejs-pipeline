@@ -21,7 +21,6 @@ on:
       labeled,
       unlabeled
     ]
-  workflow_dispatch:
 
 jobs:
   lint:
@@ -314,3 +313,28 @@ jobs:
         run: |
           docker container logs aerospike
           cat ./configs/aerospike.conf
+
+    test-npm-install:
+      runs-on: ubuntu-latest
+      needs: build-ubuntu
+      steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: recursive
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.LOWEST_SUPPORTED_NODEJS_VERSION }}
+          architecture: 'x64'
+
+      - name: Modify the package.json
+        run: |
+          npm install -g json
+          json -I -f package.json -e "this.scripts.install=\"npm-run-all removeExtraBinaries build\""
+
+      - name: Run tests
+        run: |
+          ls .
+          mkdir testDir.
+          cd testDir
+          npm install ..
