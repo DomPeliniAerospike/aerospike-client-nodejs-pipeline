@@ -296,7 +296,7 @@ jobs:
       #fix the convention here
       run: cp -r node-${{ env.LOWEST_SUPPORTED_NODE_MODULE }}-linux-x64 lib/binding/node-${{ env.LOWEST_SUPPORTED_NODE_MODULE }}-linux-x64
 
-    - uses: ./.github/actions/run-ee-server
+    - uses: actions/aerospike/aerospike-client-python/.github/actions/run-ee-server
       with:
         use-server-rc: ${{ contains(github.event.pull_request.labels.*.name, 'new-server-features') }}
         docker-hub-username: ${{ secrets.DOCKER_HUB_BOT_USERNAME }}
@@ -335,6 +335,6 @@ jobs:
     - name: Run tests
       run: |
         ls .
-        mkdir testDir.
+        mkdir testDir
         cd testDir
         npm install ..
