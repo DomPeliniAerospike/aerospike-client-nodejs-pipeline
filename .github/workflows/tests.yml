@@ -11,7 +11,7 @@ on:
   push:
     branches: ["stage", "master"]
   pull_request:
-    branches: ["stage"]
+    branches: ["stage", "master"]
     types: [
       # Default triggers
       opened,
