@@ -1,9 +1,10 @@
 name: Combine bindings
+description: 'composite run action'
 
-jobs:
-  combine-bindings:
-    runs-on: ubuntu-latest
-    steps:
+runs:
+  using: "composite"
+  runs-on: ubuntu-latest
+  steps:
     - uses: actions/checkout@v4
       with:
         submodules: recursive

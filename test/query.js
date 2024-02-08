@@ -799,9 +799,12 @@ describe('Queries', function () {
           verifyQueryResults(args, 'point map match', done)
         })
 
-        it('should match locations in a map within a radius from another location in a nested context', function (done) {
-          const args = { filters: [filter.geoWithinRadius('mg', 103.9135, 1.3085, 15000, MAPVALUES, new Context().addMapKey('nested'))] }
-          verifyQueryResults(args, 'nested point map match', done)
+        describe('filter.geoContainsGeoJSONPoint()', function () {
+          helper.skipUnlessVersion('>= 6.1.0', this)
+          it('should match locations in a map within a radius from another location in a nested context', function (done) {
+            const args = { filters: [filter.geoWithinRadius('mg', 103.9135, 1.3085, 15000, MAPVALUES, new Context().addMapKey('nested'))] }
+            verifyQueryResults(args, 'nested point map match', done)
+          })
         })
       })
 
