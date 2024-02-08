@@ -298,7 +298,7 @@ jobs:
 
 
     - name: Trigger workflow
-      uses: convictional/trigger-workflow-and-wait@1.6.1
+      uses: convictional/trigger-workflow-and-wait
       with:
         owner: aerospike
         repo: aerospike-client-python
