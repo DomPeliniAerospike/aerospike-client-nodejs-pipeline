@@ -356,7 +356,6 @@ jobs:
       run: |
         cp -r node-v115-linux-x64 lib/binding/node-v115-linux-x64
 
-
     - if: ${{ contains(github.event.pull_request.labels.*.name, 'new-server-features') }}
       uses: docker/login-action@v3
       with:

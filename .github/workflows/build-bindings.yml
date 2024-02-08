@@ -166,8 +166,11 @@ jobs:
         # Set an output parameter `uname` for use in subsequent steps
         run: |
           apt update
-          apt install -y g++ libssl-dev zlib1g-dev make build-essential libuv1-dev
+          apt install -y g++ libssl-dev zlib1g-dev make build-essential libuv1-dev wget curl
           ./scripts/build-c-client.sh
+          curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash;
+          source ~/.bashrc;
+          nvm i 20
           npm install
 
     - name: Build client x64
