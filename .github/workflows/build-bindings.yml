@@ -174,10 +174,10 @@ jobs:
 
         # Set an output parameter `uname` for use in subsequent steps
         run: |
-          sudo apt update
-          sudo apt install g++ libssl-dev zlib1g-dev;
-          sudo apt-get install -y make;
-          sudo apt install build-essential;
+          apt update
+          apt install g++ libssl-dev zlib1g-dev;
+          apt-get install -y make;
+          apt install build-essential;
           ./scripts/build-c-client.sh
           npm install
 
