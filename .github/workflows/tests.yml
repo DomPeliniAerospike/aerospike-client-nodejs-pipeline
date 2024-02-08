@@ -32,6 +32,7 @@ jobs:
         submodules: recursive
     - name: install standard
       run: npm install standard
+
     - name: lint
       run: npm run lint
 
@@ -41,8 +42,6 @@ jobs:
       matrix:
         nodejs-version: ["18", "20", "21"]
       fail-fast: false
-
-
     steps:
     - uses: actions/checkout@v4
       with:
@@ -318,7 +317,3 @@ jobs:
  
     - name: Run tests
       run: npm run test -- --h localhost --U admin --P admin --timeout 40000 test/admin.js
-
-  
-
-

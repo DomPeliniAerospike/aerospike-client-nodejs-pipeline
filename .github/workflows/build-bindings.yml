@@ -164,11 +164,9 @@ jobs:
     - name: Install build dependencies (make)
       run: sudo apt install build-essential;
 
-    - name: Build client arm
-      uses: uraimo/run-on-arch-action@v2
+    - uses: uraimo/run-on-arch-action@v2
+      name: Build client arm
       if: ${{ matrix.platform == 'aarch64' }}
-
-    - name: Run commands
       id: runcmd
       with:
         arch: aarch64
