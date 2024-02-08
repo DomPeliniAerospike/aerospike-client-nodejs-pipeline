@@ -460,26 +460,26 @@ context('admin commands', async function () {
   describe('Client#changePassword()', function () {
     it('Changes password for user', async function () {
       client.changePassword(username1, 'password350', null)
-      await wait(waitMs + 10000)
+      await wait(waitMs + 1200)
       const config = {
         hosts: options.host + ':' + options.port,
         user: username1,
         password: 'password350'
       }
       const dummyClient = await Aerospike.connect(config)
-      dummyClient.close()
+      return dummyClient.close()
     })
 
     it('With policy', async function () {
       client.changePassword(username2, 'password250', policy)
-      await wait(waitMs + 10000)
+      await wait(waitMs + 1200)
       const config = {
         hosts: options.host + ':' + options.port,
         user: username2,
         password: 'password250'
       }
       const dummyClient = await Aerospike.connect(config)
-      dummyClient.close()
+      return dummyClient.close()
     })
   })
 
