@@ -92,9 +92,9 @@ jobs:
       matrix:
         # nodejs versions to build bindings on
         nodejs: [
-          "v108",
-          "v115",
-          "v120"
+          "v108", 18,
+          "v115", 20,
+          "v120", 21
         ]
         platform: [
           "x86_64",
@@ -106,12 +106,17 @@ jobs:
       uses: myrotvorets/set-commit-status-action@v2.0.0
       with:
         sha: ${{ github.sha }}
-        context: "Build bindings (${{ matrix.nodejs }}-manylinux_${{ matrix.platform }})"
+        context: "Build bindings (${{ matrix.nodejs[0] }}-manylinux_${{ matrix.platform }})"
 
     - uses: actions/checkout@v4
       with:
         submodules: recursive
         ref: ${{ inputs.commit_sha }}
+
+    - uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.nodejs[1] }}
+        architecture: 'x64'
 
     - name: Set up QEMU for cross compiling arm64
       if: ${{ matrix.platform == 'aarch64' }}
@@ -169,7 +174,7 @@ jobs:
     - name: Send binding to test jobs
       uses: actions/upload-artifact@v4
       with:
-        name: ${{ matrix.nodejs }}-manylinux_${{ matrix.platform }}.build
+        name: ${{ matrix.nodejs[0] }}-manylinux_${{ matrix.platform }}.build
         path: ./lib/binding/node-*-linux-*/
 
     - name: Set final commit status
@@ -178,7 +183,7 @@ jobs:
       with:
         sha: ${{ github.sha }}
         status: ${{ job.status }}
-        context: "Build bindings (${{ matrix.nodejs }}-manylinux_${{ matrix.platform }})"
+        context: "Build bindings (${{ matrix.nodejs[0] }}-manylinux_${{ matrix.platform }})"
 
   macOS-x86:
     strategy:

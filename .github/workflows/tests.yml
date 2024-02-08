@@ -302,11 +302,11 @@ jobs:
 
     - name: phil
       run: |
-        ls aerospike-client-python
+        ls aerospike-client-python/.github
         pwd
 
     - name: Run ee server
-      uses: ./aerospike-client-python/.github/actions/run-ee-server/action.yml
+      uses: ./aerospike-client-python/.github/actions/run-ee-server/
       with:
         use-server-rc: ${{ contains(github.event.pull_request.labels.*.name, 'new-server-features') }}
         docker-hub-username: ${{ secrets.DOCKER_HUB_BOT_USERNAME }}
