@@ -120,10 +120,10 @@ jobs:
 
     - name: print
       run: uname -m 
-      
+
     - name: Set up QEMU for cross compiling arm64
       if: ${{ matrix.platform == 'aarch64' }}
-      uses: docker/setup-qemu-action@v2
+      uses: docker/setup-qemu-action@v3
       with:
         platforms: all
 
@@ -169,7 +169,11 @@ jobs:
         npm install
       env:
         CFLAGS: '-Werror'
-
+      with:
+          context: .
+          platforms: linux/arm64
+          push: true
+          tags: user/app:latest        
     - name: Test client
       run: |
         ${{ env.TEST_COMMAND }}
