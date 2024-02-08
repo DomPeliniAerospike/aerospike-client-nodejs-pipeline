@@ -59,7 +59,7 @@ runs:
     - name: Install client
       shell: bash
       run: |
-        mkdir lib/binding/node-v108-darwin-arm64 lib/binding/node-v115-darwin-arm64 lib/binding/node-v120-darwin-arm64
+        mkdir -p lib/binding/node-v108-darwin-arm64 lib/binding/node-v115-darwin-arm64 lib/binding/node-v120-darwin-arm64
         cp -r node-v108-linux-x64 lib/binding/node-v108-linux-x64
         cp -r node-v115-linux-x64 lib/binding/node-v115-linux-x64
         cp -r node-v120-linux-x64 lib/binding/node-v120-linux-x64
