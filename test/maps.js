@@ -1555,64 +1555,68 @@ describe('client.operate() - CDT Map operations', function () {
         .then(cleanup())
     })
 
-    it('returns true or false for a single key read', function () {
-      helper.skipUnlessVersion('>= 6.1.0', this)
-      return initState()
-        .then(createRecord({ map: { a: 1, b: 2, c: 3 } }))
-        .then(orderByKey('map'))
-        .then(operate(maps.getByKeyList('map', ['a', 'b', 'd'], maps.returnType.EXISTS)))
-        .then(assertResultEql({ map: true }))
-        .then(cleanup())
-    })
+    context('returnType.EXISTS'){
+      it('returns true or false for a single key read', function () {
+        helper.skipUnlessVersion('>= 6.1.0', this)
+        return initState()
+          .then(createRecord({ map: { a: 1, b: 2, c: 3 } }))
+          .then(orderByKey('map'))
+          .then(operate(maps.getByKeyList('map', ['a', 'b', 'd'], maps.returnType.EXISTS)))
+          .then(assertResultEql({ map: true }))
+          .then(cleanup())
+      })
 
-    it('returns true if any values exist', function () {
-      helper.skipUnlessVersion('>= 6.1.0', this)
-      return initState()
-        .then(createRecord({ map: { a: 1, b: 2, c: 3 } }))
-        .then(orderByKey('map'))
-        .then(operate(maps.getByValueList('map', [1, 2, 4], maps.returnType.EXISTS)))
-        .then(assertResultEql({ map: true }))
-        .then(cleanup())
-    })
+      it('returns true if any values exist', function () {
+        helper.skipUnlessVersion('>= 6.1.0', this)
+        return initState()
+          .then(createRecord({ map: { a: 1, b: 2, c: 3 } }))
+          .then(orderByKey('map'))
+          .then(operate(maps.getByValueList('map', [1, 2, 4], maps.returnType.EXISTS)))
+          .then(assertResultEql({ map: true }))
+          .then(cleanup())
+      })
+    }
+    context('returnType.ORDERED_MAP'){
+      it('returns key/value for a single read', function () {
+        helper.skipUnlessVersion('>= 6.3.0', this)
+        return initState()
+          .then(createRecord({ map: { a: 1, b: 2, c: 3 } }))
+          .then(orderByKey('map'))
+          .then(operate(maps.getByIndex('map', 0, maps.returnType.ORDERED_MAP)))
+          .then(assertResultEql({ map: { a: 1 } }))
+          .then(cleanup())
+      })
 
-    it('returns key/value for a single read', function () {
-      helper.skipUnlessVersion('>= 6.3.0', this)
-      return initState()
-        .then(createRecord({ map: { a: 1, b: 2, c: 3 } }))
-        .then(orderByKey('map'))
-        .then(operate(maps.getByIndex('map', 0, maps.returnType.ORDERED_MAP)))
-        .then(assertResultEql({ map: { a: 1 } }))
-        .then(cleanup())
-    })
+      it('returns key/value for a range read', function () {
+        helper.skipUnlessVersion('>= 6.3.0', this)
+        return initState()
+          .then(createRecord({ map: { a: 1, b: 2, c: 3 } }))
+          .then(orderByKey('map'))
+          .then(operate(maps.getByIndexRange('map', 0, 2, maps.returnType.ORDERED_MAP)))
+          .then(assertResultEql({ map: { a: 1, b: 2 } }))
+          .then(cleanup())
+      })
+    }
+    context('returnType.UNORDERED_MAP'){
+      it('returns key/value for a single read', function () {
+        helper.skipUnlessVersion('>= 6.3.0', this)
+        return initState()
+          .then(createRecord({ map: { a: 1, b: 2, c: 3 } }))
+          .then(orderByKey('map'))
+          .then(operate(maps.getByIndex('map', 0, maps.returnType.UNORDERED_MAP)))
+          .then(assertResultEql({ map: { a: 1 } }))
+          .then(cleanup())
+      })
 
-    it('returns key/value for a range read', function () {
-      helper.skipUnlessVersion('>= 6.3.0', this)
-      return initState()
-        .then(createRecord({ map: { a: 1, b: 2, c: 3 } }))
-        .then(orderByKey('map'))
-        .then(operate(maps.getByIndexRange('map', 0, 2, maps.returnType.ORDERED_MAP)))
-        .then(assertResultEql({ map: { a: 1, b: 2 } }))
-        .then(cleanup())
-    })
-
-    it('returns key/value for a single read', function () {
-      helper.skipUnlessVersion('>= 6.3.0', this)
-      return initState()
-        .then(createRecord({ map: { a: 1, b: 2, c: 3 } }))
-        .then(orderByKey('map'))
-        .then(operate(maps.getByIndex('map', 0, maps.returnType.UNORDERED_MAP)))
-        .then(assertResultEql({ map: { a: 1 } }))
-        .then(cleanup())
-    })
-
-    it('returns key/value for a range read', function () {
-      helper.skipUnlessVersion('>= 6.3.0', this)
-      return initState()
-        .then(createRecord({ map: { a: 1, b: 2, c: 3 } }))
-        .then(orderByKey('map'))
-        .then(operate(maps.getByIndexRange('map', 0, 2, maps.returnType.UNORDERED_MAP)))
-        .then(assertResultEql({ map: { a: 1, b: 2 } }))
-        .then(cleanup())
-    })
+      it('returns key/value for a range read', function () {
+        helper.skipUnlessVersion('>= 6.3.0', this)
+        return initState()
+          .then(createRecord({ map: { a: 1, b: 2, c: 3 } }))
+          .then(orderByKey('map'))
+          .then(operate(maps.getByIndexRange('map', 0, 2, maps.returnType.UNORDERED_MAP)))
+          .then(assertResultEql({ map: { a: 1, b: 2 } }))
+          .then(cleanup())
+      })
+    }
   })
 })
