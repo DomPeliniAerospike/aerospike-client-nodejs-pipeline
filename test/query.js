@@ -158,7 +158,7 @@ describe('Queries', function () {
     })
   }
 
-  before(() => {
+  before(async () => {
     const generators = {
       keygen: keygen.string(helper.namespace, testSet, { prefix: 'test/query/', random: false }),
       recgen: () => samples.pop(),
@@ -192,7 +192,7 @@ describe('Queries', function () {
       indexes.push(['qidxBlobMapKeysNested', 'mkblob', BLOB, MAPKEYS, new Context().addMapKey('nested')])
     }
     const numberOfSamples = samples.length
-    return Promise.all([
+    await Promise.all([
       putgen.put(numberOfSamples, generators)
         .then((records) => { keys = records.map((rec) => rec.key) })
         .then(() => Promise.all(indexes.map(idx =>

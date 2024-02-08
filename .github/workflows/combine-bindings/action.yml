@@ -8,11 +8,6 @@ jobs:
       with:
         submodules: recursive
 
-    - uses: actions/setup-node@v4
-      with:
-        node-version: ${{ env.LOWEST_SUPPORTED_NODEJS_VERSION }}
-        architecture: 'x64'
-
 #    - uses: actions/download-artifact@v4
 #      with:
 #        name: v108-macosx_arm64.build
