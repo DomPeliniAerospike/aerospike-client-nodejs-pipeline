@@ -199,7 +199,7 @@ describe('Queries', function () {
           helper.index.create(idx[0], testSet, idx[1], idx[2], idx[3], idx[4])))),
       helper.udf.register('udf.lua')
     ])
-    console.log("\n\n\n\n should work!!!!!")
+    console.log('\n\n\n\n should work!!!!!')
     done()
   })
 
