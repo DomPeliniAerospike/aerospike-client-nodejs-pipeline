@@ -302,11 +302,11 @@ jobs:
       with:
         repository: aerospike/aerospike-client-python
         ref: v1.0
-        token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
         path: .github/actions/run-ee-server
 
     - name: test
-      run: ls .github/actions/run-ee-server
+      run: |
+        ls .github/actions/run-ee-server
 #
 #    - name: Run ee server
 #      uses: .github/actions/run-ee-server/action.yml
@@ -321,11 +321,7 @@ jobs:
     - name: Run tests
       run: npm run test -- --h localhost --U superuser --P superuser
 
-    - name: Show logs if failed
-      if: ${{ failure() }}
-      run: |
-        docker container logs aerospike
-        cat ./configs/aerospike.conf
+
 
   test-npm-install:
     runs-on: ubuntu-latest
@@ -347,8 +343,7 @@ jobs:
 
     - name: Run tests
       run: |
-        ls .
-        mkdir testDir lib/binding/openssl@3/ lib/binding/openssl@1/
+        mkdir -p testDir lib/binding/openssl@3/ lib/binding/openssl@1/
         cd testDir
         npm install ..
 
@@ -372,8 +367,7 @@ jobs:
 
     - name: Run tests
       run: |
-        ls .
-        mkdir testDir lib/binding/openssl@3/ lib/binding/openssl@1/
+        mkdir -p testDir lib/binding/openssl@3/ lib/binding/openssl@1/
         cd testDir
         yarn install ..
 
@@ -397,8 +391,7 @@ jobs:
 
     - name: Run tests
       run: |
-        ls .
-        mkdir testDir lib/binding/openssl@3/ lib/binding/openssl@1/
+        mkdir -p testDir lib/binding/openssl@3/ lib/binding/openssl@1/
         cd testDir
         pnpm install ..
 
@@ -422,7 +415,6 @@ jobs:
 
     - name: Run tests
       run: |
-        ls .
-        mkdir testDir lib/binding/openssl@3/ lib/binding/openssl@1/
+        mkdir -p testDir lib/binding/openssl@3/ lib/binding/openssl@1/
         cd testDir
         bun install ..
