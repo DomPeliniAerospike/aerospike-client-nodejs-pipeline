@@ -298,11 +298,11 @@ jobs:
 
 
     - name: Trigger workflow
-      uses: convictional/trigger-workflow-and-wait@1.6.5
+      uses: convictional/trigger-workflow-and-wait@1.6.1
       with:
         owner: aerospike
         repo: aerospike-client-python
-        workflow_file_name: action.yml
+        workflow_file_name:  ./.github/actions/run-ee-server/action.yml
         ref: main
         wait_interval: 10
         propagate_failure: true
