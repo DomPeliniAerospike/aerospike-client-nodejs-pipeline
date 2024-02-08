@@ -1555,9 +1555,10 @@ describe('client.operate() - CDT Map operations', function () {
         .then(cleanup())
     })
 
-    context('returnType.EXISTS'){
+    context('returnType.EXISTS', function () {
+      helper.skipUnlessVersion('>= 6.1.0', this)
       it('returns true or false for a single key read', function () {
-        helper.skipUnlessVersion('>= 6.1.0', this)
+        
         return initState()
           .then(createRecord({ map: { a: 1, b: 2, c: 3 } }))
           .then(orderByKey('map'))
@@ -1567,7 +1568,6 @@ describe('client.operate() - CDT Map operations', function () {
       })
 
       it('returns true if any values exist', function () {
-        helper.skipUnlessVersion('>= 6.1.0', this)
         return initState()
           .then(createRecord({ map: { a: 1, b: 2, c: 3 } }))
           .then(orderByKey('map'))
@@ -1576,9 +1576,11 @@ describe('client.operate() - CDT Map operations', function () {
           .then(cleanup())
       })
     }
-    context('returnType.ORDERED_MAP'){
+
+    context('returnType.ORDERED_MAP', function () {
+      helper.skipUnlessVersion('>= 6.3.0', this)
       it('returns key/value for a single read', function () {
-        helper.skipUnlessVersion('>= 6.3.0', this)
+
         return initState()
           .then(createRecord({ map: { a: 1, b: 2, c: 3 } }))
           .then(orderByKey('map'))
@@ -1588,7 +1590,7 @@ describe('client.operate() - CDT Map operations', function () {
       })
 
       it('returns key/value for a range read', function () {
-        helper.skipUnlessVersion('>= 6.3.0', this)
+
         return initState()
           .then(createRecord({ map: { a: 1, b: 2, c: 3 } }))
           .then(orderByKey('map'))
@@ -1597,9 +1599,9 @@ describe('client.operate() - CDT Map operations', function () {
           .then(cleanup())
       })
     }
-    context('returnType.UNORDERED_MAP'){
+    context('returnType.UNORDERED_MAP', function () {
+      helper.skipUnlessVersion('>= 6.3.0', this)
       it('returns key/value for a single read', function () {
-        helper.skipUnlessVersion('>= 6.3.0', this)
         return initState()
           .then(createRecord({ map: { a: 1, b: 2, c: 3 } }))
           .then(orderByKey('map'))
@@ -1609,7 +1611,6 @@ describe('client.operate() - CDT Map operations', function () {
       })
 
       it('returns key/value for a range read', function () {
-        helper.skipUnlessVersion('>= 6.3.0', this)
         return initState()
           .then(createRecord({ map: { a: 1, b: 2, c: 3 } }))
           .then(orderByKey('map'))
