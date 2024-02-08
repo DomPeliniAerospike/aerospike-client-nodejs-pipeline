@@ -376,3 +376,45 @@ jobs:
 
     - name: Run tests
       run: npm run valgrind -- --t 40000
+
+  test-typescript:
+    runs-on: ubuntu-latest
+    needs: build-ubuntu
+    strategy:
+      matrix:
+        node-version: [
+          "20",
+        ]
+      fail-fast: false
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        submodules: recursive
+
+    - uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+        architecture: 'x64'
+
+    - uses: actions/download-artifact@v4
+      with:
+        name: binding-${{ matrix.node-version }}
+
+    - name: make binding folder
+      run: mkdir lib/binding
+
+    - name: Install client
+      run: |
+        cp -r node-v115-linux-x64 lib/binding/node-v115-linux-x64
+
+    - name: Modify the package.json
+      run: |
+        mkdir my-aerospike-project
+        cd my-aerospike-project
+        npm init -y
+        npm install typescript ts-node --save-dev
+        npm install ..
+        cp ../examples/typescript.ts
+        npx tsc index.ts
+        node index.js
