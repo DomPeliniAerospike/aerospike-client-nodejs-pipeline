@@ -44,12 +44,13 @@ const MAPKEYS = Aerospike.indexType.MAPKEYS
 const keygen = helper.keygen
 const metagen = helper.metagen
 const putgen = helper.putgen
+let samples
 
 describe('Queries', function () {
   const client = helper.client
 
   const testSet = 'test/query-' + Math.floor(Math.random() * 100000)
-  const samples = [
+  samples = [
     { name: 'int match', i: 5 },
     { name: 'int non-match', i: 500 },
     { name: 'int list match', li: [1, 5, 9] },
@@ -267,7 +268,7 @@ describe('Queries', function () {
       stream.on('error', error => { throw error })
       stream.on('data', record => results.push(record.bins))
       stream.on('end', () => {
-        expect(results.length).to.be.above(60)
+        expect(results.length).to.be.above(samples.length)
         done()
       })
     })
@@ -286,7 +287,7 @@ describe('Queries', function () {
         recordTotal += recordsReceived
         if (recordsReceived !== maxRecs) {
           expect(query.hasNextPage()).to.equal(false)
-          expect(recordTotal).to.be.above(60)
+          expect(recordTotal).to.be.above(samples.length)
           break
         }
         recordsReceived = 0
@@ -309,19 +310,22 @@ describe('Queries', function () {
       })
     })
 
-    it('should apply a stream UDF to the nested context', function (done) {
-      const args = {
-        filters: [filter.contains('name', 'value', MAPKEYS, new Context().addMapKey('nested'))]
-      }
-      const query = client.query(helper.namespace, testSet, args)
-      query.setUdf('udf', 'even')
-      const stream = query.foreach()
-      const results = []
-      stream.on('error', error => { throw error })
-      stream.on('data', record => results.push(record.bins))
-      stream.on('end', () => {
-        expect(results.sort()).to.eql([])
-        done()
+    describe('index with cdt context', function () {
+      helper.skipUnlessVersion('>= 6.1.0', this)
+      it('should apply a stream UDF to the nested context', function (done) {
+        const args = {
+          filters: [filter.contains('name', 'value', MAPKEYS, new Context().addMapKey('nested'))]
+        }
+        const query = client.query(helper.namespace, testSet, args)
+        query.setUdf('udf', 'even')
+        const stream = query.foreach()
+        const results = []
+        stream.on('error', error => { throw error })
+        stream.on('data', record => results.push(record.bins))
+        stream.on('end', () => {
+          expect(results.sort()).to.eql([])
+          done()
+        })
       })
     })
 
@@ -416,29 +420,31 @@ describe('Queries', function () {
           recordsReceived = 0
         }
       })
-
-      it('Paginates correctly using query.results() on an index with a cdt context', async function () {
-        let recordTotal = 0
-        let recordsReceived = 0
-        let pageTotal = 0
-        const lastPage = 1
-        const maxRecs = 5
-        const query = client.query(helper.namespace, testSet, { paginate: true, maxRecords: maxRecs, filters: [filter.contains('nested', 'value', MAPKEYS, new Context().addMapKey('doubleNested'))] })
-        let results = []
-        while (1) {
-          results = await query.results()
-          recordsReceived += results.length
-          results = []
-          pageTotal += 1
-          recordTotal += recordsReceived
-          if (recordsReceived !== maxRecs) {
-            expect(query.hasNextPage()).to.equal(false)
-            expect(pageTotal).to.equal(lastPage)
-            expect(recordTotal).to.equal(3)
-            break
+      describe('index with cdt context', function () {
+        helper.skipUnlessVersion('>= 6.1.0', this)
+        it('Paginates correctly using query.results() on an index with a cdt context', async function () {
+          let recordTotal = 0
+          let recordsReceived = 0
+          let pageTotal = 0
+          const lastPage = 1
+          const maxRecs = 5
+          const query = client.query(helper.namespace, testSet, { paginate: true, maxRecords: maxRecs, filters: [filter.contains('nested', 'value', MAPKEYS, new Context().addMapKey('doubleNested'))] })
+          let results = []
+          while (1) {
+            results = await query.results()
+            recordsReceived += results.length
+            results = []
+            pageTotal += 1
+            recordTotal += recordsReceived
+            if (recordsReceived !== maxRecs) {
+              expect(query.hasNextPage()).to.equal(false)
+              expect(pageTotal).to.equal(lastPage)
+              expect(recordTotal).to.equal(3)
+              break
+            }
+            recordsReceived = 0
           }
-          recordsReceived = 0
-        }
+        })
       })
 
       it('Throw error when query.UDF is set and query.paginate is true', async function () {
@@ -906,9 +912,12 @@ describe('Queries', function () {
           verifyQueryResults(args, 'region map match', done)
         })
 
-        it('should match regions in a map that contain a lng/lat coordinate pair in a nested context', function (done) {
-          const args = { filters: [filter.geoContainsPoint('mg', 103.913, 1.308, MAPVALUES, new Context().addMapKey('nested'))] }
-          verifyQueryResults(args, 'nested region map match', done)
+        describe('index with cdt context', function () {
+          helper.skipUnlessVersion('>= 6.1.0', this)
+          it('should match regions in a map that contain a lng/lat coordinate pair in a nested context', function (done) {
+            const args = { filters: [filter.geoContainsPoint('mg', 103.913, 1.308, MAPVALUES, new Context().addMapKey('nested'))] }
+            verifyQueryResults(args, 'nested region map match', done)
+          })
         })
       })
     })
@@ -957,28 +966,33 @@ describe('Queries', function () {
         done()
       })
     })
-
-    it('should apply a user defined function and aggregate the results from a map', function (done) {
-      const args = {
-        filters: [filter.contains('nested', 'value', MAPKEYS)]
-      }
-      const query = client.query(helper.namespace, testSet, args)
-      query.apply('udf', 'count', function (error, result) {
-        if (error) throw error
-        expect(result).to.equal(3)
-        done()
+    describe('index with cdt context', function () {
+      helper.skipUnlessVersion('>= 6.1.0', this)
+      it('should apply a user defined function and aggregate the results from a map', function (done) {
+        const args = {
+          filters: [filter.contains('nested', 'value', MAPKEYS)]
+        }
+        const query = client.query(helper.namespace, testSet, args)
+        query.apply('udf', 'count', function (error, result) {
+          if (error) throw error
+          expect(result).to.equal(3)
+          done()
+        })
       })
     })
 
-    it('should apply a user defined function and aggregate the results from a nested map', function (done) {
-      const args = {
-        filters: [filter.contains('nested', 'value', MAPKEYS, new Context().addMapKey('doubleNested'))]
-      }
-      const query = client.query(helper.namespace, testSet, args)
-      query.apply('udf', 'count', function (error, result) {
-        if (error) throw error
-        expect(result).to.equal(3)
-        done()
+    describe('index with cdt context', function () {
+      helper.skipUnlessVersion('>= 6.1.0', this)
+      it('should apply a user defined function and aggregate the results from a nested map', function (done) {
+        const args = {
+          filters: [filter.contains('nested', 'value', MAPKEYS, new Context().addMapKey('doubleNested'))]
+        }
+        const query = client.query(helper.namespace, testSet, args)
+        query.apply('udf', 'count', function (error, result) {
+          if (error) throw error
+          expect(result).to.equal(3)
+          done()
+        })
       })
     })
 
