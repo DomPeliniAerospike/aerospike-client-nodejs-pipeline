@@ -306,9 +306,7 @@ jobs:
         path: ./.github/actions/run-ee-server
 
     - name: Run ee server
-      uses: ./.github/actions/run-ee-server
-
-    - uses: .github/actions/run-ee-server/action.yml
+      uses: .github/actions/run-ee-server/action.yml
       with:
         use-server-rc: ${{ contains(github.event.pull_request.labels.*.name, 'new-server-features') }}
         docker-hub-username: ${{ secrets.DOCKER_HUB_BOT_USERNAME }}
