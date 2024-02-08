@@ -1,4 +1,4 @@
-name: combine-binidngs.yml
+name: Combine bindings
 
 jobs:
   combine-bindings:

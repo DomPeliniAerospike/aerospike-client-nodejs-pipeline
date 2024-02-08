@@ -34,7 +34,7 @@ function wait (ms) {
 }
 
 context('admin commands', async function () {
-  if (helper.config.user !== 'admin') {
+  if (helper.config.user !== 'superuser') {
     return
   }
   const client = helper.client

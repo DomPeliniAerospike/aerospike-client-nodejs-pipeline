@@ -271,7 +271,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: build-ubuntu
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
       with:
         submodules: recursive
 
@@ -297,29 +297,13 @@ jobs:
       run: cp -r node-${{ env.LOWEST_SUPPORTED_NODE_MODULE }}-linux-x64 lib/binding/node-${{ env.LOWEST_SUPPORTED_NODE_MODULE }}-linux-x64
 
 
-    - name: Trigger workflow
-      uses: convictional/trigger-workflow-and-wait
+    - name: Run ee server
+      uses: aerospike/aerospike-client-python/.github/actions/run-ee-server/action.yml
       with:
-        owner: aerospike
-        repo: aerospike-client-python
-        workflow_file_name:  ./.github/actions/run-ee-server/action.yml
-        ref: main
-        wait_interval: 10
-        propagate_failure: true
-        trigger_workflow: true
-        wait_workflow: true
-
-    - name: test
-      run: |
-        ls .github/actions/run-ee-server
-#
-#    - name: Run ee server
-#      uses: .github/actions/run-ee-server/action.yml
-#      with:
-#        use-server-rc: ${{ contains(github.event.pull_request.labels.*.name, 'new-server-features') }}
-#        docker-hub-username: ${{ secrets.DOCKER_HUB_BOT_USERNAME }}
-#        docker-hub-password: ${{ secrets.DOCKER_HUB_BOT_PW }}
-#
+        use-server-rc: ${{ contains(github.event.pull_request.labels.*.name, 'new-server-features') }}
+        docker-hub-username: ${{ secrets.DOCKER_HUB_BOT_USERNAME }}
+        docker-hub-password: ${{ secrets.DOCKER_HUB_BOT_PW }}
+ 
     - name: Wait for server to start
       run: sleep 5
 
