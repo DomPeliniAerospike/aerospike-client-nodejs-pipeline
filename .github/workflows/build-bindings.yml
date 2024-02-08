@@ -155,15 +155,6 @@ jobs:
       if: ${{ !inputs.run_tests }}
       run: echo "TEST_COMMAND=node -e 'aerospike = require(\".\/lib\/aerospike\")'" >> $GITHUB_ENV
 
-
-    - run: sudo apt update
-    - name: Install build dependencies (C Client dependency packages)
-      run: sudo apt install g++ libssl-dev zlib1g-dev;
-    - name: Install build dependencies (make)
-      run: sudo apt-get install -y make;
-    - name: Install build dependencies (make)
-      run: sudo apt install build-essential;
-
     - uses: uraimo/run-on-arch-action@v2
       name: Build client arm
       if: ${{ matrix.platform == 'aarch64' }}
@@ -175,7 +166,7 @@ jobs:
         # Set an output parameter `uname` for use in subsequent steps
         run: |
           apt update
-          apt install -y g++ libssl-dev zlib1g-dev make build-essential
+          apt install -y g++ libssl-dev zlib1g-dev make build-essential libuv1-dev
           ./scripts/build-c-client.sh
           npm install
 
