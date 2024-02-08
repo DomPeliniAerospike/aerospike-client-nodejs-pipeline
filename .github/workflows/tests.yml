@@ -298,7 +298,7 @@ jobs:
 
 
     - name: Trigger workflow
-      uses: .github/actions/run-ee-server
+      uses: convictional/trigger-workflow-and-wait@1.6.5
       with:
         owner: aerospike
         repo: aerospike-client-python
