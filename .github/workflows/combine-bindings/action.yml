@@ -57,7 +57,7 @@ runs:
         name: v120-manylinux_arm64.build
 
     - name: Install client
-      #fix the convention here
+      shell: bash
       run: |
         cp -r node-v108-linux-x64 lib/binding/node-v108-linux-x64
         cp -r node-v115-linux-x64 lib/binding/node-v115-linux-x64

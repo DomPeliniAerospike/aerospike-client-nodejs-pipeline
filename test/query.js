@@ -117,7 +117,7 @@ describe('Queries', function () {
     })
   }
 
-  before(async (done) => {
+  before(() => {
     const generators = {
       keygen: keygen.string(helper.namespace, testSet, { prefix: 'test/query/', random: false }),
       recgen: () => samples.pop(),
@@ -181,7 +181,6 @@ describe('Queries', function () {
       samples.push({ name: 'nested aggregate', nested: { doubleNested: { value: 20 } } })
       samples.push({ name: 'nested aggregate', nested: { doubleNested: { value: 30 } } })
 
-      // CDT context indexes
       indexes.push(['qidxNameNested', 'name', STRING, MAPKEYS, new Context().addMapKey('nested')])
       indexes.push(['qidxIntListNested', 'li', NUMERIC, LIST, new Context().addMapKey('nested')])
       indexes.push(['qidxIntMapNested', 'mi', NUMERIC, MAPVALUES, new Context().addMapKey('nested')])
@@ -193,6 +192,7 @@ describe('Queries', function () {
       indexes.push(['qidxAggregateMapNested', 'nested', STRING, MAPKEYS])
       indexes.push(['qidxAggregateMapDoubleNested', 'nested', STRING, MAPKEYS, new Context().addMapKey('doubleNested')])
     }
+
     const numberOfSamples = samples.length
     return Promise.all([
       putgen.put(numberOfSamples, generators)
