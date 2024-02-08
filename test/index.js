@@ -210,8 +210,8 @@ context('secondary indexes', function () {
   })
 
   describe('Client#indexRemove()', async function () {
-    beforeEach(() => {
-      helper.index.create(testIndex.name, helper.set, testIndex.bin,
+    beforeEach(async () => {
+      await helper.index.create(testIndex.name, helper.set, testIndex.bin,
         Aerospike.indexDataType.STRING, Aerospike.indexType.DEFAULT)
     })
 
