@@ -189,7 +189,7 @@ jobs:
           "v115",
           "v120"
         ]
-    runs-on: macos-12-large
+    runs-on: macos-latest
     steps:
     - name: Show job status for commit
       uses: myrotvorets/set-commit-status-action@v2.0.0
@@ -257,7 +257,6 @@ jobs:
 
   macOS-m1:
     runs-on: [
-      self-hosted,
       macOS,
       ARM64
     ]
