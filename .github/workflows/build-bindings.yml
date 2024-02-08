@@ -256,10 +256,7 @@ jobs:
         context: "Build bindings (${{ matrix.nodejs }}-macosx_x86_64)"
 
   macOS-m1:
-    runs-on: [
-      macOS,
-      ARM64
-    ]
+    runs-on: flyci-macos-large-latest-m1
     strategy:
       matrix:
         nodejs-version: [
