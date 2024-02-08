@@ -636,9 +636,12 @@ describe('Queries', function () {
           verifyQueryResults(args, 'int list match', done)
         })
 
-        it('should match integers in a list within a range in a nested context', function (done) {
-          const args = { filters: [filter.range('li', 3, 7, LIST, new Context().addMapKey('nested'))] }
-          verifyQueryResults(args, 'nested int list match', done)
+        describe('index with cdt context', function () {
+          helper.skipUnlessVersion('>= 6.1.0', this)
+          it('should match integers in a list within a range in a nested context', function (done) {
+            const args = { filters: [filter.range('li', 3, 7, LIST, new Context().addMapKey('nested'))] }
+            verifyQueryResults(args, 'nested int list match', done)
+          })
         })
 
         it('should match integers in a map within a range', function (done) {
@@ -646,9 +649,12 @@ describe('Queries', function () {
           verifyQueryResults(args, 'int map match', done)
         })
 
-        it('should match integers in a map within a range in a nested context', function (done) {
-          const args = { filters: [filter.range('mi', 3, 7, MAPVALUES, new Context().addMapKey('nested'))] }
-          verifyQueryResults(args, 'nested int map match', done)
+        describe('index with cdt context', function () {
+          helper.skipUnlessVersion('>= 6.1.0', this)
+          it('should match integers in a map within a range in a nested context', function (done) {
+            const args = { filters: [filter.range('mi', 3, 7, MAPVALUES, new Context().addMapKey('nested'))] }
+            verifyQueryResults(args, 'nested int map match', done)
+          })
         })
       })
 
@@ -658,9 +664,12 @@ describe('Queries', function () {
           verifyQueryResults(args, 'int list match', done)
         })
 
-        it('should match lists containing an integer in a nested context', function (done) {
-          const args = { filters: [filter.contains('li', 5, LIST, new Context().addMapKey('nested'))] }
-          verifyQueryResults(args, 'nested int list match', done)
+        describe('index with cdt context', function () {
+          helper.skipUnlessVersion('>= 6.1.0', this)
+          it('should match lists containing an integer in a nested context', function (done) {
+            const args = { filters: [filter.contains('li', 5, LIST, new Context().addMapKey('nested'))] }
+            verifyQueryResults(args, 'nested int list match', done)
+          })
         })
 
         it('should match maps containing an integer value', function (done) {
@@ -668,9 +677,12 @@ describe('Queries', function () {
           verifyQueryResults(args, 'int map match', done)
         })
 
-        it('should match maps containing an integer value in a nested context', function (done) {
-          const args = { filters: [filter.contains('mi', 5, MAPVALUES, new Context().addMapKey('nested'))] }
-          verifyQueryResults(args, 'nested int map match', done)
+        describe('index with cdt context', function () {
+          helper.skipUnlessVersion('>= 6.1.0', this)
+          it('should match maps containing an integer value in a nested context', function (done) {
+            const args = { filters: [filter.contains('mi', 5, MAPVALUES, new Context().addMapKey('nested'))] }
+            verifyQueryResults(args, 'nested int map match', done)
+          })
         })
 
         it('should match lists containing a string', function (done) {
@@ -678,9 +690,13 @@ describe('Queries', function () {
           verifyQueryResults(args, 'string list match', done)
         })
 
-        it('should match lists containing a string in a nested context', function (done) {
-          const args = { filters: [filter.contains('ls', 'banana', LIST, new Context().addMapKey('nested'))] }
-          verifyQueryResults(args, 'nested string list match', done)
+
+        describe('index with cdt context', function () {
+          helper.skipUnlessVersion('>= 6.1.0', this)
+          it('should match lists containing a string in a nested context', function (done) {
+            const args = { filters: [filter.contains('ls', 'banana', LIST, new Context().addMapKey('nested'))] }
+            verifyQueryResults(args, 'nested string list match', done)
+          })
         })
 
         it('should match maps containing a string value', function (done) {
@@ -688,9 +704,12 @@ describe('Queries', function () {
           verifyQueryResults(args, 'string map match', done)
         })
 
-        it('should match maps containing a string value in a nested context', function (done) {
-          const args = { filters: [filter.contains('ms', 'banana', MAPVALUES, new Context().addMapKey('nested'))] }
-          verifyQueryResults(args, 'nested string map match', done)
+        describe('index with cdt context', function () {
+          helper.skipUnlessVersion('>= 6.1.0', this)
+          it('should match maps containing a string value in a nested context', function (done) {
+            const args = { filters: [filter.contains('ms', 'banana', MAPVALUES, new Context().addMapKey('nested'))] }
+            verifyQueryResults(args, 'nested string map match', done)
+          })
         })
 
         it('should match maps containing a string key', function (done) {
@@ -698,10 +717,14 @@ describe('Queries', function () {
           verifyQueryResults(args, 'string mapkeys match', done)
         })
 
-        it('should match maps containing a string key in a nested context', function (done) {
-          const args = { filters: [filter.contains('mks', 'banana', MAPKEYS, new Context().addMapKey('nested'))] }
-          verifyQueryResults(args, 'nested string mapkeys match', done)
-        })
+        describe('index with cdt context', function () {
+          helper.skipUnlessVersion('>= 6.1.0', this)
+          it('should match maps containing a string key in a nested context', function (done) {
+            const args = { filters: [filter.contains('mks', 'banana', MAPKEYS, new Context().addMapKey('nested'))] }
+            verifyQueryResults(args, 'nested string mapkeys match', done)
+          })
+        })          
+
         context('Uses blob Secondary indexes', function () {
           helper.skipUnlessVersion('>= 7.0.0', this)
           it('should match lists containing a blob', function (done) {
@@ -753,10 +776,13 @@ describe('Queries', function () {
           verifyQueryResults(args, 'point list match', done)
         })
 
-        it('should match locations in a list within a GeoJSON region in a nested context', function (done) {
-          const region = new GeoJSON({ type: 'Polygon', coordinates: [[[103, 1.3], [104, 1.3], [104, 1.4], [103, 1.4], [103, 1.3]]] })
-          const args = { filters: [filter.geoWithinGeoJSONRegion('lg', region, LIST, new Context().addMapKey('nested'))] }
-          verifyQueryResults(args, 'nested point list match', done)
+        describe('index with cdt context', function () {
+          helper.skipUnlessVersion('>= 6.1.0', this)
+          it('should match locations in a list within a GeoJSON region in a nested context', function (done) {
+            const region = new GeoJSON({ type: 'Polygon', coordinates: [[[103, 1.3], [104, 1.3], [104, 1.4], [103, 1.4], [103, 1.3]]] })
+            const args = { filters: [filter.geoWithinGeoJSONRegion('lg', region, LIST, new Context().addMapKey('nested'))] }
+            verifyQueryResults(args, 'nested point list match', done)
+          })
         })
 
         it('should match locations in a map within a GeoJSON region', function (done) {
@@ -764,11 +790,13 @@ describe('Queries', function () {
           const args = { filters: [filter.geoWithinGeoJSONRegion('mg', region, MAPVALUES)] }
           verifyQueryResults(args, 'point map match', done)
         })
-
-        it('should match locations in a map within a GeoJSON region in a nested context', function (done) {
-          const region = new GeoJSON({ type: 'Polygon', coordinates: [[[103, 1.3], [104, 1.3], [104, 1.4], [103, 1.4], [103, 1.3]]] })
-          const args = { filters: [filter.geoWithinGeoJSONRegion('mg', region, MAPVALUES, new Context().addMapKey('nested'))] }
-          verifyQueryResults(args, 'nested point map match', done)
+        describe('index with cdt context', function () {
+          helper.skipUnlessVersion('>= 6.1.0', this)
+          it('should match locations in a map within a GeoJSON region in a nested context', function (done) {
+            const region = new GeoJSON({ type: 'Polygon', coordinates: [[[103, 1.3], [104, 1.3], [104, 1.4], [103, 1.4], [103, 1.3]]] })
+            const args = { filters: [filter.geoWithinGeoJSONRegion('mg', region, MAPVALUES, new Context().addMapKey('nested'))] }
+            verifyQueryResults(args, 'nested point map match', done)
+          })
         })
 
         it('accepts a plain object as GeoJSON', function (done) {
@@ -789,9 +817,12 @@ describe('Queries', function () {
           verifyQueryResults(args, 'point list match', done)
         })
 
-        it('should match locations in a list within a radius from another location in a nested context', function (done) {
-          const args = { filters: [filter.geoWithinRadius('lg', 103.9135, 1.3085, 15000, LIST, new Context().addMapKey('nested'))] }
-          verifyQueryResults(args, 'nested point list match', done)
+        describe('index with cdt context', function () {
+          helper.skipUnlessVersion('>= 6.1.0', this)
+          it('should match locations in a list within a radius from another location in a nested context', function (done) {
+            const args = { filters: [filter.geoWithinRadius('lg', 103.9135, 1.3085, 15000, LIST, new Context().addMapKey('nested'))] }
+            verifyQueryResults(args, 'nested point list match', done)
+          })
         })
 
         it('should match locations in a map within a radius from another location', function (done) {
@@ -799,7 +830,7 @@ describe('Queries', function () {
           verifyQueryResults(args, 'point map match', done)
         })
 
-        describe('filter.geoContainsGeoJSONPoint()', function () {
+        describe('index with cdt context', function () {
           helper.skipUnlessVersion('>= 6.1.0', this)
           it('should match locations in a map within a radius from another location in a nested context', function (done) {
             const args = { filters: [filter.geoWithinRadius('mg', 103.9135, 1.3085, 15000, MAPVALUES, new Context().addMapKey('nested'))] }
@@ -821,10 +852,13 @@ describe('Queries', function () {
           verifyQueryResults(args, 'region list match', done)
         })
 
-        it('should match regions in a list that contain a GeoJSON point in a nested context', function (done) {
-          const point = new GeoJSON({ type: 'Point', coordinates: [103.913, 1.308] })
-          const args = { filters: [filter.geoContainsGeoJSONPoint('lg', point, LIST, new Context().addMapKey('nested'))] }
-          verifyQueryResults(args, 'nested region list match', done)
+        describe('index with cdt context', function () {
+          helper.skipUnlessVersion('>= 6.1.0', this)
+          it('should match regions in a list that contain a GeoJSON point in a nested context', function (done) {
+            const point = new GeoJSON({ type: 'Point', coordinates: [103.913, 1.308] })
+            const args = { filters: [filter.geoContainsGeoJSONPoint('lg', point, LIST, new Context().addMapKey('nested'))] }
+            verifyQueryResults(args, 'nested region list match', done)
+          })
         })
 
         it('should match regions in a map that contain a GeoJSON point', function (done) {
@@ -833,10 +867,13 @@ describe('Queries', function () {
           verifyQueryResults(args, 'region map match', done)
         })
 
-        it('should match regions in a map that contain a GeoJSON point in a nested context', function (done) {
-          const point = new GeoJSON({ type: 'Point', coordinates: [103.913, 1.308] })
-          const args = { filters: [filter.geoContainsGeoJSONPoint('mg', point, MAPVALUES, new Context().addMapKey('nested'))] }
-          verifyQueryResults(args, 'nested region map match', done)
+        describe('index with cdt context', function () {
+          helper.skipUnlessVersion('>= 6.1.0', this)
+          it('should match regions in a map that contain a GeoJSON point in a nested context', function (done) {
+            const point = new GeoJSON({ type: 'Point', coordinates: [103.913, 1.308] })
+            const args = { filters: [filter.geoContainsGeoJSONPoint('mg', point, MAPVALUES, new Context().addMapKey('nested'))] }
+            verifyQueryResults(args, 'nested region map match', done)
+          })
         })
 
         it('accepts a plain object as GeoJSON', function (done) {
@@ -852,16 +889,20 @@ describe('Queries', function () {
           verifyQueryResults(args, 'region match', done)
         })
 
+
         it('should match regions in a list that contain a lng/lat coordinate pair', function (done) {
           const args = { filters: [filter.geoContainsPoint('lg', 103.913, 1.308, LIST)] }
           verifyQueryResults(args, 'region list match', done)
         })
 
-        it('should match regions in a list that contain a lng/lat coordinate pair in a nested context', function (done) {
-          const args = { filters: [filter.geoContainsPoint('lg', 103.913, 1.308, LIST, new Context().addMapKey('nested'))] }
-          verifyQueryResults(args, 'nested region list match', done)
+        describe('index with cdt context', function () {
+          helper.skipUnlessVersion('>= 6.1.0', this)
+          it('should match regions in a list that contain a lng/lat coordinate pair in a nested context', function (done) {
+            const args = { filters: [filter.geoContainsPoint('lg', 103.913, 1.308, LIST, new Context().addMapKey('nested'))] }
+            verifyQueryResults(args, 'nested region list match', done)
+          })
         })
-
+        
         it('should match regions in a map that contain a lng/lat coordinate pair', function (done) {
           const args = { filters: [filter.geoContainsPoint('mg', 103.913, 1.308, MAPVALUES)] }
           verifyQueryResults(args, 'region map match', done)
