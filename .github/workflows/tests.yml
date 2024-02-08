@@ -22,6 +22,7 @@ on:
       unlabeled
     ]
     workflow_dispatch:
+
 jobs:
   lint:
     runs-on: ubuntu-latest
@@ -299,24 +300,23 @@ jobs:
     - name: Download aerospike-client-python repository
       run: git clone https://github.com/aerospike/aerospike-client-python.git
 
-
     - name: phil
       run: |
         ls aerospike-client-python
         pwd
 
-#    - name: Run ee server
-#      uses: aerospike-client-python/.github/actions/run-ee-server/action.yml
-#      with:
-#        use-server-rc: ${{ contains(github.event.pull_request.labels.*.name, 'new-server-features') }}
-#        docker-hub-username: ${{ secrets.DOCKER_HUB_BOT_USERNAME }}
-#        docker-hub-password: ${{ secrets.DOCKER_HUB_BOT_PW }}
-#
-# 
-#    - name: Wait for server to start
-#      run: sleep 5
-#
-#    - name: Run tests
-#      run: npm run test -- --h localhost --U superuser --P superuser
+    - name: Run ee server
+      uses: ./aerospike-client-python/.github/actions/run-ee-server/action.yml
+      with:
+        use-server-rc: ${{ contains(github.event.pull_request.labels.*.name, 'new-server-features') }}
+        docker-hub-username: ${{ secrets.DOCKER_HUB_BOT_USERNAME }}
+        docker-hub-password: ${{ secrets.DOCKER_HUB_BOT_PW }}
+ 
+ 
+    - name: Wait for server to start
+      run: sleep 5
+ 
+    - name: Run tests
+      run: npm run test -- --h localhost --U superuser --P superuser
 
 
