@@ -460,6 +460,7 @@ context('admin commands', async function () {
   describe('Client#changePassword()', function () {
     it('Changes password for user', async function () {
       client.changePassword(username1, 'password350', null)
+      await wait(waitMs)
       const config = {
         hosts: options.host + ':' + options.port,
         user: username1,
@@ -471,6 +472,7 @@ context('admin commands', async function () {
 
     it('With policy', async function () {
       client.changePassword(username2, 'password250', policy)
+      await wait(waitMs)
       const config = {
         hosts: options.host + ':' + options.port,
         user: username2,
