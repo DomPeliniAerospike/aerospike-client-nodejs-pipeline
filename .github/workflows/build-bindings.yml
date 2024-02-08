@@ -86,7 +86,7 @@ on:
 
 jobs:
   manylinux:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     strategy:
       fail-fast: false
       matrix:
@@ -102,6 +102,28 @@ jobs:
         ]
 
     steps:
+
+        - uses: uraimo/run-on-arch-action@v2
+          name: Run commands
+          id: runcmd
+          with:
+            arch: armv7
+            distro: ubuntu22.04
+
+            # Not required, but speeds up builds by storing container images in
+            # a GitHub package registry.
+            githubToken: ${{ github.token }}
+
+            # Set an output parameter `uname` for use in subsequent steps
+            run: |
+              uname -a
+              echo ::set-output name=uname::$(uname -a)
+
+        - name: Get the output
+          # Echo the `uname` output parameter from the `runcmd` step
+          run: |
+            echo "The uname output was ${{ steps.runcmd.outputs.uname }}"
+
     - name: Show job status for commit
       uses: myrotvorets/set-commit-status-action@v2.0.0
       with:
@@ -164,16 +186,30 @@ jobs:
       run: sudo apt install build-essential;
 
     - name: Build client arm
+      uses: uraimo/run-on-arch-action@v2
       if: ${{ matrix.platform == 'aarch64' }}
-      run: |
-        qemu-aarch64 ./scripts/build-c-client.sh
-        qemu-aarch64 npm install
-      env:
-        CFLAGS: '-Werror' 
+      name: Run commands
+      id: runcmd
+      with:
+        arch: aarch64
+        distro: ubuntu22.04
+
+        # Set an output parameter `uname` for use in subsequent steps
+        run: |
+          sudo apt update
+          sudo apt install g++ libssl-dev zlib1g-dev;
+          sudo apt-get install -y make;
+          sudo apt install build-essential;
+          ./scripts/build-c-client.sh
+          npm install
 
     - name: Build client x64
       if: ${{ matrix.platform != 'aarch64' }}
       run: |
+        sudo apt update
+        sudo apt install g++ libssl-dev zlib1g-dev;
+        sudo apt-get install -y make;
+        sudo apt install build-essential;
         ./scripts/build-c-client.sh
         npm install
       env:
