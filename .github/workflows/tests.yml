@@ -301,7 +301,8 @@ jobs:
 
 
     - name: phil
-      run: ls aerospike-cleint-python
+      run: ls aerospike-client-python
+
 #    - name: Run ee server
 #      uses: aerospike-client-python/.github/actions/run-ee-server/action.yml
 #      with:
