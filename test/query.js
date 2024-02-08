@@ -82,37 +82,7 @@ describe('Queries', function () {
     { name: 'filter', value: 1 },
     { name: 'filter', value: 2 },
     { name: 'filter', value: 3 },
-    { name: 'filter', value: 4 },
-
-    { name: 'nested int list match', li: { nested: [1, 5, 9] } },
-    { name: 'nested int list non-match', li: { nested: [500, 501, 502] } },
-    { name: 'nested int map match', mi: { nested: { a: 1, b: 5, c: 9 } } },
-    { name: 'nested int map non-match', mi: { nested: { a: 500, b: 501, c: 502 } } },
-    { name: 'nested string list match', ls: { nested: ['banana', 'blueberry'] } },
-    { name: 'nested string list non-match', ls: { nested: ['tomato', 'cuccumber'] } },
-    { name: 'nested string map match', ms: { nested: { a: 'banana', b: 'blueberry' } } },
-    { name: 'nested string map non-match', ms: { nested: { a: 'tomato', b: 'cuccumber' } } },
-    { name: 'nested string mapkeys match', mks: { nested: { banana: 1, blueberry: 2 } } },
-    { name: 'nested string mapkeys non-match', mks: { nested: { tomato: 3, cuccumber: 4 } } },
-    { name: 'nested point match', g: { nested: GeoJSON.Point(103.913, 1.308) } },
-    { name: 'nested point non-match', g: { nested: GeoJSON.Point(-122.101, 37.421) } },
-    { name: 'nested point list match', lg: { nested: [GeoJSON.Point(103.913, 1.308), GeoJSON.Point(105.913, 3.308)] } },
-    { name: 'nested point list non-match', lg: { nested: [GeoJSON.Point(-122.101, 37.421), GeoJSON.Point(-120.101, 39.421)] } },
-    { name: 'nested point map match', mg: { nested: { a: GeoJSON.Point(103.913, 1.308), b: GeoJSON.Point(105.913, 3.308) } } },
-    { name: 'nested point map non-match', mg: { nested: { a: GeoJSON.Point(-122.101, 37.421), b: GeoJSON.Point(-120.101, 39.421) } } },
-    { name: 'nested region match', g: { nested: GeoJSON.Polygon([102.913, 0.308], [102.913, 2.308], [104.913, 2.308], [104.913, 0.308], [102.913, 0.308]) } },
-    { name: 'nested region non-match', g: { nested: GeoJSON.Polygon([-121.101, 36.421], [-121.101, 38.421], [-123.101, 38.421], [-123.101, 36.421], [-121.101, 36.421]) } },
-    { name: 'nested region list match', lg: { nested: [GeoJSON.Polygon([102.913, 0.308], [102.913, 2.308], [104.913, 2.308], [104.913, 0.308], [102.913, 0.308])] } },
-    { name: 'nested region list non-match', lg: { nested: [GeoJSON.Polygon([-121.101, 36.421], [-121.101, 38.421], [-123.101, 38.421], [-123.101, 36.421], [-121.101, 36.421])] } },
-    { name: 'nested region map match', mg: { nested: { a: GeoJSON.Polygon([102.913, 0.308], [102.913, 2.308], [104.913, 2.308], [104.913, 0.308], [102.913, 0.308]) } } },
-    { name: 'nested region map non-match', mg: { nested: [GeoJSON.Polygon([-121.101, 36.421], [-121.101, 38.421], [-123.101, 38.421], [-123.101, 36.421], [-121.101, 36.421])] } },
-    { name: 'nested aggregate', nested: { value: 10 } },
-    { name: 'nested aggregate', nested: { value: 20 } },
-    { name: 'nested aggregate', nested: { value: 30 } },
-    { name: 'nested aggregate', nested: { doubleNested: { value: 10 } } },
-    { name: 'nested aggregate', nested: { doubleNested: { value: 20 } } },
-    { name: 'nested aggregate', nested: { doubleNested: { value: 30 } } }
-
+    { name: 'filter', value: 4 }
   ]
 
   const indexes = [
@@ -126,19 +96,8 @@ describe('Queries', function () {
     ['qidxStrMapKeys', 'mks', STRING, MAPKEYS],
     ['qidxGeo', 'g', GEO2DSPHERE],
     ['qidxGeoList', 'lg', GEO2DSPHERE, LIST],
-    ['qidxGeoMap', 'mg', GEO2DSPHERE, MAPVALUES],
-    // CDT context indexes
-    ['qidxNameNested', 'name', STRING, MAPKEYS, new Context().addMapKey('nested')],
-    ['qidxIntListNested', 'li', NUMERIC, LIST, new Context().addMapKey('nested')],
-    ['qidxIntMapNested', 'mi', NUMERIC, MAPVALUES, new Context().addMapKey('nested')],
-    ['qidxStrListNested', 'ls', STRING, LIST, new Context().addMapKey('nested')],
-    ['qidxStrMapNested', 'ms', STRING, MAPVALUES, new Context().addMapKey('nested')],
-    ['qidxStrMapKeysNested', 'mks', STRING, MAPKEYS, new Context().addMapKey('nested')],
-    ['qidxGeoListNested', 'lg', GEO2DSPHERE, LIST, new Context().addMapKey('nested')],
-    ['qidxGeoMapNested', 'mg', GEO2DSPHERE, MAPVALUES, new Context().addMapKey('nested')],
+    ['qidxGeoMap', 'mg', GEO2DSPHERE, MAPVALUES]
 
-    ['qidxAggregateMapNested', 'nested', STRING, MAPKEYS],
-    ['qidxAggregateMapDoubleNested', 'nested', STRING, MAPKEYS, new Context().addMapKey('doubleNested')]
   ]
 
   let keys = []
@@ -191,15 +150,57 @@ describe('Queries', function () {
       indexes.push(['qidxBlobMapNested', 'mblob', BLOB, MAPVALUES, new Context().addMapKey('nested')])
       indexes.push(['qidxBlobMapKeysNested', 'mkblob', BLOB, MAPKEYS, new Context().addMapKey('nested')])
     }
+
+    if (helper.cluster.isVersionInRange('>= 6.1.0')) {
+      samples.push({ name: 'nested int list match', li: { nested: [1, 5, 9] } })
+      samples.push({ name: 'nested int list non-match', li: { nested: [500, 501, 502] } })
+      samples.push({ name: 'nested int map match', mi: { nested: { a: 1, b: 5, c: 9 } } })
+      samples.push({ name: 'nested int map non-match', mi: { nested: { a: 500, b: 501, c: 502 } } })
+      samples.push({ name: 'nested string list match', ls: { nested: ['banana', 'blueberry'] } })
+      samples.push({ name: 'nested string list non-match', ls: { nested: ['tomato', 'cuccumber'] } })
+      samples.push({ name: 'nested string map match', ms: { nested: { a: 'banana', b: 'blueberry' } } })
+      samples.push({ name: 'nested string map non-match', ms: { nested: { a: 'tomato', b: 'cuccumber' } } })
+      samples.push({ name: 'nested string mapkeys match', mks: { nested: { banana: 1, blueberry: 2 } } })
+      samples.push({ name: 'nested string mapkeys non-match', mks: { nested: { tomato: 3, cuccumber: 4 } } })
+      samples.push({ name: 'nested point match', g: { nested: GeoJSON.Point(103.913, 1.308) } })
+      samples.push({ name: 'nested point non-match', g: { nested: GeoJSON.Point(-122.101, 37.421) } })
+      samples.push({ name: 'nested point list match', lg: { nested: [GeoJSON.Point(103.913, 1.308), GeoJSON.Point(105.913, 3.308)] } })
+      samples.push({ name: 'nested point list non-match', lg: { nested: [GeoJSON.Point(-122.101, 37.421), GeoJSON.Point(-120.101, 39.421)] } })
+      samples.push({ name: 'nested point map match', mg: { nested: { a: GeoJSON.Point(103.913, 1.308), b: GeoJSON.Point(105.913, 3.308) } } })
+      samples.push({ name: 'nested point map non-match', mg: { nested: { a: GeoJSON.Point(-122.101, 37.421), b: GeoJSON.Point(-120.101, 39.421) } } })
+      samples.push({ name: 'nested region match', g: { nested: GeoJSON.Polygon([102.913, 0.308], [102.913, 2.308], [104.913, 2.308], [104.913, 0.308], [102.913, 0.308]) } })
+      samples.push({ name: 'nested region non-match', g: { nested: GeoJSON.Polygon([-121.101, 36.421], [-121.101, 38.421], [-123.101, 38.421], [-123.101, 36.421], [-121.101, 36.421]) } })
+      samples.push({ name: 'nested region list match', lg: { nested: [GeoJSON.Polygon([102.913, 0.308], [102.913, 2.308], [104.913, 2.308], [104.913, 0.308], [102.913, 0.308])] } })
+      samples.push({ name: 'nested region list non-match', lg: { nested: [GeoJSON.Polygon([-121.101, 36.421], [-121.101, 38.421], [-123.101, 38.421], [-123.101, 36.421], [-121.101, 36.421])] } })
+      samples.push({ name: 'nested region map match', mg: { nested: { a: GeoJSON.Polygon([102.913, 0.308], [102.913, 2.308], [104.913, 2.308], [104.913, 0.308], [102.913, 0.308]) } } })
+      samples.push({ name: 'nested region map non-match', mg: { nested: [GeoJSON.Polygon([-121.101, 36.421], [-121.101, 38.421], [-123.101, 38.421], [-123.101, 36.421], [-121.101, 36.421])] } })
+      samples.push({ name: 'nested aggregate', nested: { value: 10 } })
+      samples.push({ name: 'nested aggregate', nested: { value: 20 } })
+      samples.push({ name: 'nested aggregate', nested: { value: 30 } })
+      samples.push({ name: 'nested aggregate', nested: { doubleNested: { value: 10 } } })
+      samples.push({ name: 'nested aggregate', nested: { doubleNested: { value: 20 } } })
+      samples.push({ name: 'nested aggregate', nested: { doubleNested: { value: 30 } } })
+
+      // CDT context indexes
+      indexes.push(['qidxNameNested', 'name', STRING, MAPKEYS, new Context().addMapKey('nested')])
+      indexes.push(['qidxIntListNested', 'li', NUMERIC, LIST, new Context().addMapKey('nested')])
+      indexes.push(['qidxIntMapNested', 'mi', NUMERIC, MAPVALUES, new Context().addMapKey('nested')])
+      indexes.push(['qidxStrListNested', 'ls', STRING, LIST, new Context().addMapKey('nested')])
+      indexes.push(['qidxStrMapNested', 'ms', STRING, MAPVALUES, new Context().addMapKey('nested')])
+      indexes.push(['qidxStrMapKeysNested', 'mks', STRING, MAPKEYS, new Context().addMapKey('nested')])
+      indexes.push(['qidxGeoListNested', 'lg', GEO2DSPHERE, LIST, new Context().addMapKey('nested')])
+      indexes.push(['qidxGeoMapNested', 'mg', GEO2DSPHERE, MAPVALUES, new Context().addMapKey('nested')])
+      indexes.push(['qidxAggregateMapNested', 'nested', STRING, MAPKEYS])
+      indexes.push(['qidxAggregateMapDoubleNested', 'nested', STRING, MAPKEYS, new Context().addMapKey('doubleNested')])
+    }
     const numberOfSamples = samples.length
-    await Promise.all([
+    return Promise.all([
       putgen.put(numberOfSamples, generators)
         .then((records) => { keys = records.map((rec) => rec.key) })
         .then(() => Promise.all(indexes.map(idx =>
           helper.index.create(idx[0], testSet, idx[1], idx[2], idx[3], idx[4])))),
       helper.udf.register('udf.lua')
     ])
-    done()
   })
 
   after(() => helper.udf.remove('udf.lua')
