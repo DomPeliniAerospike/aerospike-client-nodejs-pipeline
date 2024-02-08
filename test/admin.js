@@ -34,7 +34,7 @@ function wait (ms) {
 }
 
 context('admin commands', async function () {
-  if (helper.config.user !== 'superuser') {
+  if (helper.config.user !== 'admin') {
     return
   }
   const client = helper.client
@@ -473,11 +473,13 @@ context('admin commands', async function () {
     it('With policy', async function () {
       client.changePassword(username2, 'password250', policy)
       await wait(waitMs + 3000)
+
       const config = {
         hosts: options.host + ':' + options.port,
         user: username2,
         password: 'password250'
       }
+      console.log(config)
       const dummyClient = await Aerospike.connect(config)
       return dummyClient.close()
     })
