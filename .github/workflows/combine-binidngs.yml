@@ -13,25 +13,25 @@ jobs:
         node-version: ${{ env.LOWEST_SUPPORTED_NODEJS_VERSION }}
         architecture: 'x64'
 
-    - uses: actions/download-artifact@v4
-      with:
-        name: v108-macosx_arm64.build
+#    - uses: actions/download-artifact@v4
+#      with:
+#        name: v108-macosx_arm64.build
 
     - uses: actions/download-artifact@v4
       with:
         name: v108-macosx_x86_64.build
 
-    - uses: actions/download-artifact@v4
-      with:
-        name: v115-macosx_arm64.build
+#    - uses: actions/download-artifact@v4
+#      with:
+#        name: v115-macosx_arm64.build
 
     - uses: actions/download-artifact@v4
       with:
         name: v115-macosx_x86_64.build
 
-    - uses: actions/download-artifact@v4
-      with:
-        name: v120-macosx_arm64.build
+#    - uses: actions/download-artifact@v4
+#      with:
+#        name: v120-macosx_arm64.build
 
     - uses: actions/download-artifact@v4
       with:
@@ -73,9 +73,10 @@ jobs:
         cp -r node-v108-darwin-x64 lib/binding/node-v108-darwin-x64
         cp -r node-v115-darwin-x64 lib/binding/node-v115-darwin-x64
         cp -r node-v120-darwin-x64 lib/binding/node-v120-darwin-x64
-        cp -r node-v108-darwin-arm64 lib/binding/node-v108-darwin-arm64
-        cp -r node-v115-darwin-arm64 lib/binding/node-v115-darwin-arm64
-        cp -r node-v120-darwin-arm64 lib/binding/node-v120-darwin-arm64
+        mkdir lib/binding/node-v108-darwin-arm64 lib/binding/node-v115-darwin-arm64 lib/binding/node-v120-darwin-arm64
+#        cp -r node-v108-darwin-arm64 lib/binding/node-v108-darwin-arm64
+#        cp -r node-v115-darwin-arm64 lib/binding/node-v115-darwin-arm64
+#        cp -r node-v120-darwin-arm64 lib/binding/node-v120-darwin-arm64
 
     - uses: ./.github/actions/run-ee-server
       with:
