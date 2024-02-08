@@ -385,7 +385,7 @@ jobs:
       with:
         submodules: recursive
 
-    - uses: ./.github/workflows/combine-bindings/action.yml
+    - uses: ./.github/workflows/combine-bindings/
 
     - uses: actions/setup-node@v4
       with:
@@ -411,7 +411,7 @@ jobs:
       with:
         submodules: recursive
 
-    - uses: ./.github/workflows/combine-bindings/action.yml
+    - uses: ./.github/workflows/combine-bindings/
 
     - uses: actions/setup-node@v4
       with:
@@ -437,7 +437,7 @@ jobs:
       with:
         submodules: recursive
 
-    - uses: ./.github/workflows/combine-bindings/action.yml
+    - uses: ./.github/workflows/combine-bindings/
 
     - uses: actions/setup-node@v4
       with:
@@ -463,7 +463,7 @@ jobs:
       with:
         submodules: recursive
 
-    - uses: ./.github/workflows/combine-bindings/action.yml
+    - uses: ./.github/workflows/combine-bindings/
 
     - uses: actions/setup-node@v4
       with:
