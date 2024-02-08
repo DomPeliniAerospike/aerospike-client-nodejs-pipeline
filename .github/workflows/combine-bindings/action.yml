@@ -10,7 +10,7 @@ runs:
 
 #    - uses: actions/download-artifact@v4
 #      with:
-#        name: v108-macosx_arm64.build
+#        name: v108-macosx_aarch64.build
 
     - uses: actions/download-artifact@v4
       with:
@@ -18,7 +18,7 @@ runs:
 
 #    - uses: actions/download-artifact@v4
 #      with:
-#        name: v115-macosx_arm64.build
+#        name: v115-macosx_aarch64.build
 
     - uses: actions/download-artifact@v4
       with:
@@ -26,7 +26,7 @@ runs:
 
 #    - uses: actions/download-artifact@v4
 #      with:
-#        name: v120-macosx_arm64.build
+#        name: v120-macosx_aarch64.build
 
     - uses: actions/download-artifact@v4
       with:
@@ -38,7 +38,7 @@ runs:
 
     - uses: actions/download-artifact@v4
       with:
-        name: v108-manylinux_arm64.build
+        name: v108-manylinux_aarch64.build
 
     - uses: actions/download-artifact@v4
       with:
@@ -46,7 +46,7 @@ runs:
 
     - uses: actions/download-artifact@v4
       with:
-        name: v115-manylinux_arm64.build
+        name: v115-manylinux_aarch64.build
 
     - uses: actions/download-artifact@v4
       with:
@@ -54,7 +54,7 @@ runs:
 
     - uses: actions/download-artifact@v4
       with:
-        name: v120-manylinux_arm64.build
+        name: v120-manylinux_aarch64.build
 
     - name: Install client
       shell: bash

@@ -21,7 +21,7 @@ on:
       labeled,
       unlabeled
     ]
-
+    workflow_dispatch:
 jobs:
   lint:
     runs-on: ubuntu-latest
@@ -304,7 +304,7 @@ jobs:
       run: |
         ls aerospike-client-python
         pwd
-  
+
 #    - name: Run ee server
 #      uses: aerospike-client-python/.github/actions/run-ee-server/action.yml
 #      with:
