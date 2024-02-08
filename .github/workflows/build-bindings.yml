@@ -92,9 +92,9 @@ jobs:
       matrix:
         # nodejs versions to build bindings on
         nodejs: [
-          "v108", 18,
-          "v115", 20,
-          "v120", 21
+          ["v108", 18],
+          ["v115", 20],
+          ["v120", 21]
         ]
         platform: [
           "x86_64",
