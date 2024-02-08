@@ -118,11 +118,14 @@ jobs:
         node-version: ${{ matrix.nodejs[1] }}
         architecture: 'x64'
 
+    - name: print
+      run: uname -m 
+      
     - name: Set up QEMU for cross compiling arm64
       if: ${{ matrix.platform == 'aarch64' }}
       uses: docker/setup-qemu-action@v2
       with:
-        platforms: arm64
+        platforms: all
 
     - uses: ./.github/actions/run-ee-server
       if: ${{ inputs.run_tests }}
