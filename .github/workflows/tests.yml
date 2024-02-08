@@ -297,11 +297,17 @@ jobs:
       run: cp -r node-${{ env.LOWEST_SUPPORTED_NODE_MODULE }}-linux-x64 lib/binding/node-${{ env.LOWEST_SUPPORTED_NODE_MODULE }}-linux-x64
 
 
-    - name: Check out repository
-      uses: actions/checkout@v4
+    - name: Trigger workflow
+      uses: .github/actions/run-ee-server
       with:
-        repository: aerospike/aerospike-client-python
-        ref: v1.0
+        owner: aerospike
+        repo: aerospike-client-python
+        workflow_file_name: action.yml
+        ref: main
+        wait_interval: 10
+        propagate_failure: true
+        trigger_workflow: true
+        wait_workflow: true
 
     - name: test
       run: |
