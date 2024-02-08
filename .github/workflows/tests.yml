@@ -316,7 +316,7 @@ jobs:
       run: sleep 5
  
     - name: Run tests
-      run: npm run test -- --h localhost --U admin --P admin --timeout 40000 test/admin.js
+      run: npm run test -- --h localhost --U admin --P admin --t 40000 test/admin.js
 
   test-valgrind:
     runs-on: ubuntu-latest
@@ -375,4 +375,4 @@ jobs:
       run: sleep 3
 
     - name: Run tests
-      run: npm run valgrind --timeout 40000
+      run: npm run valgrind -- --t 40000
