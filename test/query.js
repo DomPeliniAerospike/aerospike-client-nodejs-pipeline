@@ -1043,15 +1043,18 @@ describe('Queries', function () {
           expect(job).to.be.instanceof(Job)
         })
     })
-    it('returns a Promise that resolves to a Job with a filter containing a CDT context', function () {
-      const args = {
-        filters: [filter.contains('nested', 'value', MAPKEYS, new Context().addMapKey('doubleNested'))]
-      }
-      const query = client.query(helper.namespace, testSet, args)
-      return query.background('udf', 'noop')
-        .then(job => {
-          expect(job).to.be.instanceof(Job)
-        })
+    describe('index with cdt context', function () {
+      helper.skipUnlessVersion('>= 6.1.0', this)
+      it('returns a Promise that resolves to a Job with a filter containing a CDT context', function () {
+        const args = {
+          filters: [filter.contains('nested', 'value', MAPKEYS, new Context().addMapKey('doubleNested'))]
+        }
+        const query = client.query(helper.namespace, testSet, args)
+        return query.background('udf', 'noop')
+          .then(job => {
+            expect(job).to.be.instanceof(Job)
+          })
+      })
     })
   })
 

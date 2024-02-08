@@ -169,7 +169,7 @@ jobs:
     - name: Send binding to test jobs
       uses: actions/upload-artifact@v4
       with:
-        name: ${{ matrix.nodejs }}-manylinux_${{ matrix.platform }}.build}
+        name: ${{ matrix.nodejs }}-manylinux_${{ matrix.platform }}.build
         path: ./lib/binding/node-*-linux-*/
 
     - name: Set final commit status
