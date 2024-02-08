@@ -158,47 +158,50 @@ describe('Queries', function () {
     })
   }
 
-  before(async () => {
-    const generators = {
-      keygen: keygen.string(helper.namespace, testSet, { prefix: 'test/query/', random: false }),
-      recgen: () => samples.pop(),
-      metagen: metagen.constant({ ttl: 300 })
-    }
+  before(() => {
+    it('does this work?', function () {
+      const generators = {
+        keygen: keygen.string(helper.namespace, testSet, { prefix: 'test/query/', random: false }),
+        recgen: () => samples.pop(),
+        metagen: metagen.constant({ ttl: 300 })
+      }
 
-    if (helper.cluster.isVersionInRange('>= 7.0.0')) {
-      samples.push({ name: 'blob match', blob: Buffer.from('guava') })
-      samples.push({ name: 'blob non-match', blob: Buffer.from('pumpkin') })
-      samples.push({ name: 'blob list match', lblob: [Buffer.from('guava'), Buffer.from('papaya')] })
-      samples.push({ name: 'blob list non-match', lblob: [Buffer.from('pumpkin'), Buffer.from('turnip')] })
-      samples.push({ name: 'blob map match', mblob: { a: Buffer.from('guava'), b: Buffer.from('papaya') } })
-      samples.push({ name: 'blob map non-match', mblob: { a: Buffer.from('pumpkin'), b: Buffer.from('turnip') } })
-      samples.push({ name: 'blob mapkeys match', mkblob: new Map([[Buffer.from('guava'), 1], [Buffer.from('papaya'), 2]]) })
-      samples.push({ name: 'blob mapkeys non-match', mkblob: new Map([[Buffer.from('pumpkin'), 3], [Buffer.from('turnip'), 4]]) })
-      samples.push({ name: 'nested blob match', blob: { nested: Buffer.from('guava') } })
-      samples.push({ name: 'nested blob non-match', blob: { nested: Buffer.from('pumpkin') } })
-      samples.push({ name: 'nested blob list match', lblob: { nested: [Buffer.from('guava'), Buffer.from('papaya')] } })
-      samples.push({ name: 'nested blob list non-match', lblob: { nested: [Buffer.from('pumpkin'), Buffer.from('turnip')] } })
-      samples.push({ name: 'nested blob map match', mblob: { nested: { a: Buffer.from('guava'), b: Buffer.from('papaya') } } })
-      samples.push({ name: 'nested blob map non-match', mblob: { nested: { a: Buffer.from('pumpkin'), b: Buffer.from('turnip') } } })
-      samples.push({ name: 'nested blob mapkeys match', mkblob: { nested: new Map([[Buffer.from('guava'), 1], [Buffer.from('papaya'), 2]]) } })
-      samples.push({ name: 'nested blob mapkeys non-match', mkblob: { nested: new Map([[Buffer.from('pumpkin'), 3], [Buffer.from('turnip'), 4]]) } })
+      if (helper.cluster.isVersionInRange('>= 7.0.0')) {
+        samples.push({ name: 'blob match', blob: Buffer.from('guava') })
+        samples.push({ name: 'blob non-match', blob: Buffer.from('pumpkin') })
+        samples.push({ name: 'blob list match', lblob: [Buffer.from('guava'), Buffer.from('papaya')] })
+        samples.push({ name: 'blob list non-match', lblob: [Buffer.from('pumpkin'), Buffer.from('turnip')] })
+        samples.push({ name: 'blob map match', mblob: { a: Buffer.from('guava'), b: Buffer.from('papaya') } })
+        samples.push({ name: 'blob map non-match', mblob: { a: Buffer.from('pumpkin'), b: Buffer.from('turnip') } })
+        samples.push({ name: 'blob mapkeys match', mkblob: new Map([[Buffer.from('guava'), 1], [Buffer.from('papaya'), 2]]) })
+        samples.push({ name: 'blob mapkeys non-match', mkblob: new Map([[Buffer.from('pumpkin'), 3], [Buffer.from('turnip'), 4]]) })
+        samples.push({ name: 'nested blob match', blob: { nested: Buffer.from('guava') } })
+        samples.push({ name: 'nested blob non-match', blob: { nested: Buffer.from('pumpkin') } })
+        samples.push({ name: 'nested blob list match', lblob: { nested: [Buffer.from('guava'), Buffer.from('papaya')] } })
+        samples.push({ name: 'nested blob list non-match', lblob: { nested: [Buffer.from('pumpkin'), Buffer.from('turnip')] } })
+        samples.push({ name: 'nested blob map match', mblob: { nested: { a: Buffer.from('guava'), b: Buffer.from('papaya') } } })
+        samples.push({ name: 'nested blob map non-match', mblob: { nested: { a: Buffer.from('pumpkin'), b: Buffer.from('turnip') } } })
+        samples.push({ name: 'nested blob mapkeys match', mkblob: { nested: new Map([[Buffer.from('guava'), 1], [Buffer.from('papaya'), 2]]) } })
+        samples.push({ name: 'nested blob mapkeys non-match', mkblob: { nested: new Map([[Buffer.from('pumpkin'), 3], [Buffer.from('turnip'), 4]]) } })
 
-      indexes.push(['qidxBlob', 'blob', BLOB])
-      indexes.push(['qidxBlobList', 'lblob', BLOB, LIST])
-      indexes.push(['qidxBlobMap', 'mblob', BLOB, MAPVALUES])
-      indexes.push(['qidxBlobMapKeys', 'mkblob', BLOB, MAPKEYS])
-      indexes.push(['qidxBlobListNested', 'lblob', BLOB, LIST, new Context().addMapKey('nested')])
-      indexes.push(['qidxBlobMapNested', 'mblob', BLOB, MAPVALUES, new Context().addMapKey('nested')])
-      indexes.push(['qidxBlobMapKeysNested', 'mkblob', BLOB, MAPKEYS, new Context().addMapKey('nested')])
-    }
-    const numberOfSamples = samples.length
-    await Promise.all([
-      putgen.put(numberOfSamples, generators)
-        .then((records) => { keys = records.map((rec) => rec.key) })
-        .then(() => Promise.all(indexes.map(idx =>
-          helper.index.create(idx[0], testSet, idx[1], idx[2], idx[3], idx[4])))),
-      helper.udf.register('udf.lua')
-    ])
+        indexes.push(['qidxBlob', 'blob', BLOB])
+        indexes.push(['qidxBlobList', 'lblob', BLOB, LIST])
+        indexes.push(['qidxBlobMap', 'mblob', BLOB, MAPVALUES])
+        indexes.push(['qidxBlobMapKeys', 'mkblob', BLOB, MAPKEYS])
+        indexes.push(['qidxBlobListNested', 'lblob', BLOB, LIST, new Context().addMapKey('nested')])
+        indexes.push(['qidxBlobMapNested', 'mblob', BLOB, MAPVALUES, new Context().addMapKey('nested')])
+        indexes.push(['qidxBlobMapKeysNested', 'mkblob', BLOB, MAPKEYS, new Context().addMapKey('nested')])
+      }
+      const numberOfSamples = samples.length
+      return Promise.all([
+        putgen.put(numberOfSamples, generators)
+          .then((records) => { keys = records.map((rec) => rec.key) })
+          .then(() => Promise.all(indexes.map(idx =>
+            helper.index.create(idx[0], testSet, idx[1], idx[2], idx[3], idx[4])))),
+        helper.udf.register('udf.lua')
+      ])
+    })    
+    
   })
 
   after(() => helper.udf.remove('udf.lua')
