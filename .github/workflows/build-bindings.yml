@@ -9,7 +9,7 @@ on:
   push:
     branches: ["stage", "master"]
   pull_request:
-    branches: ["stage"]
+    branches: ["stage", "master"]
     types: [
       # Default triggers
       opened,
@@ -464,7 +464,7 @@ jobs:
         submodules: recursive
 
     - uses: ./.github/workflows/combine-bindings.yml
-    
+
     - uses: actions/setup-node@v4
       with:
         node-version: ${{ env.LOWEST_SUPPORTED_NODEJS_VERSION }}
