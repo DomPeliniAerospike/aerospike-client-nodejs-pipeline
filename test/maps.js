@@ -297,7 +297,6 @@ describe('client.operate() - CDT Map operations', function () {
     })
 
     it('adds each item from the Map class to the map and returns the size of the map', function () {
-      console.log(maps.putItems('map', new Map([['e', 150], ['d', 100], ['c', 99]])))
       return initState()
         .then(createRecord({ map: { a: 1, b: 2, c: 3 } }))
         .then(operate(maps.putItems('map', new Map([['e', 150], ['d', 100], ['c', 99]]))))

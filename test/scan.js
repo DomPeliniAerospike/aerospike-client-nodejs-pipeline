@@ -416,7 +416,6 @@ context('Scans', function () {
 
       const key = keys[Math.floor(Math.random() * keys.length)]
       const record = await client.get(key)
-      console.log('After scan-op TTL : %d Key TTL: %d', ttl, record.ttl)
       expect(record.ttl).to.equal(ttl - 1)
     })
   })

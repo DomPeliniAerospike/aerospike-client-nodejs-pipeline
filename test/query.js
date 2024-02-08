@@ -192,14 +192,13 @@ describe('Queries', function () {
       indexes.push(['qidxBlobMapKeysNested', 'mkblob', BLOB, MAPKEYS, new Context().addMapKey('nested')])
     }
     const numberOfSamples = samples.length
-    Promise.all([
+    await Promise.all([
       putgen.put(numberOfSamples, generators)
         .then((records) => { keys = records.map((rec) => rec.key) })
         .then(() => Promise.all(indexes.map(idx =>
           helper.index.create(idx[0], testSet, idx[1], idx[2], idx[3], idx[4])))),
       helper.udf.register('udf.lua')
     ])
-    console.log('\n\n\n\n should work!!!!!')
     done()
   })
 
@@ -690,7 +689,6 @@ describe('Queries', function () {
           verifyQueryResults(args, 'string list match', done)
         })
 
-
         describe('index with cdt context', function () {
           helper.skipUnlessVersion('>= 6.1.0', this)
           it('should match lists containing a string in a nested context', function (done) {
@@ -723,7 +721,7 @@ describe('Queries', function () {
             const args = { filters: [filter.contains('mks', 'banana', MAPKEYS, new Context().addMapKey('nested'))] }
             verifyQueryResults(args, 'nested string mapkeys match', done)
           })
-        })          
+        })
 
         context('Uses blob Secondary indexes', function () {
           helper.skipUnlessVersion('>= 7.0.0', this)
@@ -889,7 +887,6 @@ describe('Queries', function () {
           verifyQueryResults(args, 'region match', done)
         })
 
-
         it('should match regions in a list that contain a lng/lat coordinate pair', function (done) {
           const args = { filters: [filter.geoContainsPoint('lg', 103.913, 1.308, LIST)] }
           verifyQueryResults(args, 'region list match', done)
@@ -902,7 +899,7 @@ describe('Queries', function () {
             verifyQueryResults(args, 'nested region list match', done)
           })
         })
-        
+
         it('should match regions in a map that contain a lng/lat coordinate pair', function (done) {
           const args = { filters: [filter.geoContainsPoint('mg', 103.913, 1.308, MAPVALUES)] }
           verifyQueryResults(args, 'region map match', done)
